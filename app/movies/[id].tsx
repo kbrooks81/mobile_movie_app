@@ -3,6 +3,7 @@ import { icons } from "@/constants/icons"
 import { extractUSCertification, fetchMovieDetails, fetchMovieReleaseInfo } from "@/services/api"
 import useFetch from '@/services/useFetch'
 import { router, useLocalSearchParams } from 'expo-router'
+import { Flame } from "lucide-react-native"
 import React from 'react'
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 
@@ -74,7 +75,7 @@ const MovieDetails = () => {
             />
 
             <StatPill 
-              variant="trend"
+              leftSlot={<Flame size={16} color="#CFC8FF" />}
               value={Math.round(movie?.popularity ?? 0)}
             />
           </View>

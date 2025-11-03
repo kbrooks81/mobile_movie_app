@@ -1,4 +1,4 @@
-import { Star, TrendingUp } from 'lucide-react-native';
+import { Flame, Star } from 'lucide-react-native';
 import React from 'react';
 import { Text, View } from 'react-native';
 
@@ -10,7 +10,7 @@ type StatPillProps = {
 }
 
 const StatPill = ({ value, variant = 'trend', leftSlot, className = '' }: StatPillProps) => {
-    const Icon = variant === 'trend' ? TrendingUp : variant === 'star' ? Star : null;
+    const Icon = variant === 'trend' ? Flame : variant === 'star' ? Star : null;
 
     return (
       <View className={`flex-row items-center gap-2 px-2 py-1 rounded-lg bg-dark-100 flex-none ${className}`}>
