@@ -7,17 +7,20 @@ import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 
 interface MovieInfoProps {
   label: string;
-  value?: string | number | null;
+  value?: string | number | null | React.ReactNode;
+  children?: React.ReactNode;
 }
 
-const MovieInfo = ({ label, value }: MovieInfoProps) => (
+const MovieInfo = ({ label, value, children }: MovieInfoProps) => (
   <View className="flex-col items-start justify-center mt-5">
     <Text className="text-light-200 font-normal text-sm">
       {label}
     </Text>
-    <Text className="text-light-100 font-bold text-sm mt-2">
-      {value || 'N/A'}
-    </Text>
+    {children ?? (
+      <Text className="text-light-100 font-bold text-sm mt-2">
+        {value || 'N/A'}
+      </Text>
+    )}
   </View>
 )
 
@@ -66,19 +69,37 @@ const MovieDetails = () => {
 
           <MovieInfo label="Overview" value={movie?.overview} />
 
-          <View className="flex flex-row justify-between w-1/2">
-            <MovieInfo label="Release Date" value={movie?.release_date} />
-            <MovieInfo label="Status" value={movie?.status} />
-          </View>
+          <MovieInfo label="Status" value={movie?.status} />
 
-          <MovieInfo label="Genres" value={movie?.genres?.map((genre: any) => genre.name).join(' - ') || 'N/A'} />
+          <View className="mt-2">
+            <Text className="text-light-300 text-xs">Genres</Text>
+
+            <View className="flex-row flex gap-2 mt-1">
+              {movie?.genres?.length ? (
+                movie.genres.map((g: { id: number; name: string }) => (
+                  <View
+                    key={g.id}
+                    className="px-3 py-1 rounded-md bg-dark-100 flex-none"
+                  >
+                    <Text className="text-light-100 text-sm font-semibold">
+                      {g.name}
+                    </Text>
+                  </View>
+                ))
+              ) : (
+                <Text className="text-light-200 text-sm">N/A</Text>
+              )}
+            </View>
+          </View>
 
           <View className="flex flex-row justify-between w-1/2">
             <MovieInfo label="Budget" value={budgetText} />
             <MovieInfo label="Revenue" value={revenueText} />
           </View>
 
-          <MovieInfo label="Production Companies" value={movie?.production_companies?.map((company: any) => company.name).join(' - ') || 'N/A'} />
+          <MovieInfo label="Countries" value={movie?.production_countries?.map((country: any) => country.name).join(' ・ ') || 'N/A'} />
+
+          <MovieInfo label="Production Companies" value={movie?.production_companies?.map((company: any) => company.name).join(' ・ ') || 'N/A'} />
         </View>
       </ScrollView>
 
