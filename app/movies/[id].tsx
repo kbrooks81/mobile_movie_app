@@ -1,5 +1,5 @@
 import { icons } from "@/constants/icons"
-import { fetchMovieDetails } from "@/services/api"
+import { extractUSCertification, fetchMovieDetails, fetchMovieReleaseInfo } from "@/services/api"
 import useFetch from '@/services/useFetch'
 import { router, useLocalSearchParams } from 'expo-router'
 import React from 'react'
@@ -26,6 +26,10 @@ const MovieDetails = () => {
 
   const { data: movie, loading } = useFetch(() => fetchMovieDetails(id as string));
 
+  const { data: movieReleaseInfo } = useFetch(() => fetchMovieReleaseInfo(id as string));
+
+  const rating = movieReleaseInfo ? extractUSCertification(movieReleaseInfo) : null;
+
   const budgetText = movie && movie.budget != null
     ? `$${(movie.budget / 1_000_000).toFixed(1)} million`
     : 'N/A';
@@ -46,7 +50,11 @@ const MovieDetails = () => {
 
           <View className="flex-row items-center gap-x-1 mt-2">
             <Text className="text-light-200 text-sm">{movie?.release_date?.split('-')[0]}</Text>
-            <Text className="text-light-200 text-sm">|</Text>
+            <Text className="text-light-200 text-sm">・</Text>
+
+            <Text className="text-light-200 text-sm">{rating ?? 'N/A'}</Text>
+
+            <Text className="text-light-200 text-sm">・</Text>
             <Text className="text-light-200 text-sm">{movie?.runtime} mins</Text>
           </View>
 
@@ -57,6 +65,12 @@ const MovieDetails = () => {
           </View>
 
           <MovieInfo label="Overview" value={movie?.overview} />
+
+          <View className="flex flex-row justify-between w-1/2">
+            <MovieInfo label="Release Date" value={movie?.release_date} />
+            <MovieInfo label="Status" value={movie?.status} />
+          </View>
+
           <MovieInfo label="Genres" value={movie?.genres?.map((genre: any) => genre.name).join(' - ') || 'N/A'} />
 
           <View className="flex flex-row justify-between w-1/2">

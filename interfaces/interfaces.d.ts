@@ -75,3 +75,18 @@ interface TrendingCardProps {
   movie: TrendingMovie;
   index: number;
 }
+
+interface MovieReleaseInfo {
+  id: number;
+  results: {
+    iso_3166_1: string;
+    release_dates: {
+      certification: string;
+      descriptors: string[] | null;
+      iso_639_1: string | null;
+      note: string;
+      release_date: string;
+      type: number;
+    }[];
+  }[];
+}
