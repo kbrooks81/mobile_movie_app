@@ -104,6 +104,8 @@ const Index = () => {
                   paddingRight: 5,
                   marginBottom: 10,
                 }}
+                contentContainerStyle={{ paddingHorizontal: 7 }}
+                ItemSeparatorComponent={() => <View style={{ height:12 }} />}
                 className="mt-2 pb-32"
                 scrollEnabled={false}
               />
