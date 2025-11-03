@@ -1,3 +1,4 @@
+import StatPill from "@/components/StatPill"
 import { icons } from "@/constants/icons"
 import { extractUSCertification, fetchMovieDetails, fetchMovieReleaseInfo } from "@/services/api"
 import useFetch from '@/services/useFetch'
@@ -61,10 +62,21 @@ const MovieDetails = () => {
             <Text className="text-light-200 text-sm">{movie?.runtime} mins</Text>
           </View>
 
-          <View className="flex-row items-center bg-dark-100 px-2 py-1 rounded-md gap-x-1 mt-2">
-            <Image source={icons.star} className="size-4" />
-            <Text className="text-white font-bold text-sm">{Math.round(movie?.vote_average ?? 0)}/10</Text>
-            <Text className="text-light-200 text-sm">({movie?.vote_count} votes)</Text>
+          <View className="flex-row items-center gap-2 mt-2">
+            <StatPill
+              leftSlot={<Image source={icons.star} className="size-4" />}
+              value={`${Math.round(movie?.vote_average ?? 0)}/10`}
+            />
+
+            <StatPill
+              variant="star"
+              value={movie?.vote_count ?? 0}
+            />
+            
+            <StatPill 
+              variant="trend"
+              value={Math.round(movie?.popularity ?? 0)}
+            />
           </View>
 
           <MovieInfo label="Overview" value={movie?.overview} />
