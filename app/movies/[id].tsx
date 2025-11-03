@@ -72,7 +72,7 @@ const MovieDetails = () => {
               variant="star"
               value={movie?.vote_count ?? 0}
             />
-            
+
             <StatPill 
               variant="trend"
               value={Math.round(movie?.popularity ?? 0)}
@@ -84,7 +84,7 @@ const MovieDetails = () => {
           <MovieInfo label="Status" value={movie?.status} />
 
           <View className="mt-2">
-            <Text className="text-light-300 text-xs">Genres</Text>
+            <Text className="text-light-200 font-normal text-sm">Genres</Text>
 
             <View className="flex-row flex gap-2 mt-1">
               {movie?.genres?.length ? (
@@ -110,6 +110,8 @@ const MovieDetails = () => {
           </View>
 
           <MovieInfo label="Countries" value={movie?.production_countries?.map((country: any) => country.name).join(' ・ ') || 'N/A'} />
+
+          <MovieInfo label="Tagline" value={movie?.tagline} />
 
           <MovieInfo label="Production Companies" value={movie?.production_companies?.map((company: any) => company.name).join(' ・ ') || 'N/A'} />
         </View>
