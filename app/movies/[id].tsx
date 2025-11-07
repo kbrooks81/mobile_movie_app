@@ -1,11 +1,12 @@
 import StatPill from "@/components/StatPill"
 import { icons } from "@/constants/icons"
 import { extractUSCertification, fetchMovieDetails, fetchMovieReleaseInfo } from "@/services/api"
+import { deleteSaved, getByMovieId, saveMovie } from "@/services/saved"
 import useFetch from '@/services/useFetch'
 import { router, useLocalSearchParams } from 'expo-router'
 import { Flame } from "lucide-react-native"
 import React from 'react'
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 
 interface MovieInfoProps {
   label: string;
@@ -27,13 +28,59 @@ const MovieInfo = ({ label, value, children }: MovieInfoProps) => (
 )
 
 const MovieDetails = () => {
-  const { id } = useLocalSearchParams();
+  const { id } = useLocalSearchParams<{ id: string }>();
+
+  const movieId = Number(id);
 
   const { data: movie, loading } = useFetch(() => fetchMovieDetails(id as string));
 
   const { data: movieReleaseInfo } = useFetch(() => fetchMovieReleaseInfo(id as string));
 
   const rating = movieReleaseInfo ? extractUSCertification(movieReleaseInfo) : null;
+
+  const [isSaved, setIsSaved] = React.useState(false);
+  const [rowId, setRowId] = React.useState<string | null>(null);
+  const [saving, setSaving] = React.useState(false);
+
+  // On mount, check saved state
+  React.useEffect(() => {
+    let mounted = true;
+    getByMovieId(movieId).then((row) => {
+      if (!mounted) return;
+      setIsSaved(!!row);
+      setRowId(row?.$id ?? null);
+    });
+    return () => { mounted = false; };
+  }, [movieId]);
+
+  const onToggleSave = async () => {
+    if (!movieId /* || !movie */) return;
+    if (saving) return;
+    setSaving(true);
+
+    try {
+      if (!isSaved) {
+        // you may have the movie object named differently; pass the fields you have
+        const created = await saveMovie({
+          id: movieId,
+          title: movie?.title,
+          poster_path: movie?.poster_path,
+          vote_average: movie?.vote_average,
+          popularity: movie?.popularity,
+          release_date: movie?.release_date,
+          genre_ids: movie?.genres?.map(genre => genre.id) ?? [],
+        });
+        setIsSaved(true);
+        setRowId(created.$id);
+      } else if (rowId) {
+        await deleteSaved(rowId);
+        setIsSaved(false);
+        setRowId(null);
+      }
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const budgetText = movie && movie.budget != null
     ? `$${(movie.budget / 1_000_000).toFixed(1)} million`
@@ -52,6 +99,20 @@ const MovieDetails = () => {
 
         <View className="flex-col items-start justify-center mt-5 px-5">
           <Text className="text-white text-bold text-xl">{movie?.title}</Text>
+
+            <TouchableOpacity
+              onPress={onToggleSave}
+              disabled={saving}
+              className="bg-white/10 border border-white/20 rounded-xl px-4 py-2"
+            >
+              {saving ? (
+                <ActivityIndicator />
+              ) : (
+                <Text className="text-white font-semibold">
+                  {isSaved ? "Unsave" : "Save"}
+                </Text>
+              )}
+            </TouchableOpacity>
 
           <View className="flex-row items-center gap-x-1 mt-2">
             <Text className="text-light-200 text-sm">{movie?.release_date?.split('-')[0]}</Text>

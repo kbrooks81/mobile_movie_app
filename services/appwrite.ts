@@ -2,13 +2,13 @@ import { Client, ID, Query, TablesDB } from "react-native-appwrite";
 // track the searches made by a user
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
-const TABLE_ID = process.env.EXPO_PUBLIC_APPWRITE_TABLE_ID!;
+const TABLE_ID = process.env.EXPO_PUBLIC_APPWRITE_MAIN_TABLE_ID!;
 
 const client = new Client()
     .setEndpoint(process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT!)
     .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!);
 
-const tablesDB = new TablesDB(client);
+export const tablesDB = new TablesDB(client);
 
 export const updateSearchCount = async (query: string, movie: Movie) => {
 
