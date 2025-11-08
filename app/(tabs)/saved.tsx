@@ -3,6 +3,7 @@ import SavedMovieCard from "@/components/SavedMovieCard";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { listSaved } from "@/services/saved";
+import { useFocusEffect } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Text, View } from "react-native";
 
@@ -38,6 +39,12 @@ export default function Saved() {
   const handleRemoved = (rowId: string) => {
     setRows((prev) => prev.filter((x) => x.$id !== rowId));
   };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      refresh();
+    }, [])
+  );
 
   return (
     <View className="flex-1 bg-primary">
