@@ -3,6 +3,7 @@ import { icons } from "@/constants/icons"
 import { extractUSCertification, fetchMovieDetails, fetchMovieReleaseInfo } from "@/services/api"
 import { deleteSaved, getByMovieId, saveMovie } from "@/services/saved"
 import useFetch from '@/services/useFetch'
+import { Feather } from "@expo/vector-icons"
 import { router, useLocalSearchParams } from 'expo-router'
 import { Flame } from "lucide-react-native"
 import React from 'react'
@@ -93,26 +94,32 @@ const MovieDetails = () => {
   return (
     <View className="bg-primary flex-1">
       <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
-        <View>
+        <View className="relative">
           <Image source={{ uri: `https://image.tmdb.org/t/p/w500${movie?.poster_path}` }} className="w-full h-[550px]" resizeMode="stretch"/>
+
+          <TouchableOpacity
+            onPress={onToggleSave}
+            disabled={saving}
+            hitSlop={{ top:10, right: 10, bottom: 10, left: 10 }}
+            accessibilityRole="button"
+            accessibilityLabel={isSaved ? "Unsave movie" : "Save movie"}
+            accessibilityState={{ selected : isSaved }}
+            className="absolute top-5 left-6 z-10 bg-black/45 rounded-full px-3 py-2 border border-white/20"
+          >
+            {saving ? (
+              <ActivityIndicator />
+            ) : (
+              <Feather
+                name={isSaved ? "bookmark" : "bookmark"}
+                size={25}
+                color={isSaved ? "#ab8bff" : "#ffffff"} 
+              />
+            )}
+          </TouchableOpacity>
         </View>
 
         <View className="flex-col items-start justify-center mt-5 px-5">
           <Text className="text-white text-bold text-xl">{movie?.title}</Text>
-
-            <TouchableOpacity
-              onPress={onToggleSave}
-              disabled={saving}
-              className="bg-white/10 border border-white/20 rounded-xl px-4 py-2"
-            >
-              {saving ? (
-                <ActivityIndicator />
-              ) : (
-                <Text className="text-white font-semibold">
-                  {isSaved ? "Unsave" : "Save"}
-                </Text>
-              )}
-            </TouchableOpacity>
 
           <View className="flex-row items-center gap-x-1 mt-2">
             <Text className="text-light-200 text-sm">{movie?.release_date?.split('-')[0]}</Text>
