@@ -16,18 +16,16 @@ const MovieCard = ({ id, poster_path, title, vote_average, release_date }: Movie
             </View>
 
             <CircleScore
-                value={(vote_average ?? 0) * 10} // TMDB 0–10 → %
+                value={(vote_average ?? 0) * 10}
                 size={40}
                 strokeWidth={4}
-                className="absolute bottom-14 -left-2" // tweak to taste
+                className="absolute bottom-14 -left-2"
             />
 
             <Text className='text-sm font-bold text-white mt-2' numberOfLines={1}>{title}</Text>
 
             <View className='flex-row items-center justify-between'>
                 <Text className='text-xs text-light-300 font-medium mt-1'>{release_date?.split('-')[0]}</Text>
-
-                {/* <Text className='text-xs text-light-300 font-medium uppercase'>Movie</Text> */}
             </View>
         </TouchableOpacity>
     </Link>

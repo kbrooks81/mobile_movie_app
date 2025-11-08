@@ -56,8 +56,8 @@ export default function Saved() {
         <FlatList
           data={rows}
           keyExtractor={(item) => item.$id}
-          numColumns={3}
-          columnWrapperStyle={{ justifyContent: "center", gap: 16, marginVertical: 16 }}
+          numColumns={2}
+          columnWrapperStyle={{ justifyContent: "center", gap: 24, marginVertical: 16 }}
           contentContainerStyle={{ paddingTop: 24, paddingBottom: 100, paddingHorizontal: 20 }}
           renderItem={({ item }) => <SavedMovieCard row={item} onRemoved={handleRemoved} />}
           onEndReachedThreshold={0.5}

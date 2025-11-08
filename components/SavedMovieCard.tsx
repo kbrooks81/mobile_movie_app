@@ -30,7 +30,7 @@ export default function SavedMovieCard({ row, onRemoved }: Props) {
 
   return (
     <Link href={`/movies/${row.movie_id}`} asChild>
-      <TouchableOpacity activeOpacity={0.9} className="relative w-[30%]">
+      <TouchableOpacity activeOpacity={0.9} className="relative w-[40%]">
         <View className="rounded-xl overflow-hidden">
           <Image
             source={poster ? { uri: poster } : undefined}
@@ -38,18 +38,10 @@ export default function SavedMovieCard({ row, onRemoved }: Props) {
             resizeMode="cover"
           />
         </View>
-
-        {/* tiny “unsave” button */}
-        <TouchableOpacity
-          onPress={onRemove}
-          className="absolute top-1.5 right-1.5 bg-black/60 rounded-full px-2 py-1"
-        >
-          <Text className="text-white text-xs">Remove</Text>
-        </TouchableOpacity>
-
-        {/* title (optional) */}
+        
+        {/* Movie Title */}
         {row.title ? (
-          <Text numberOfLines={1} className="text-white mt-2 text-xs">
+          <Text numberOfLines={1} className="text-md font-bold mt-2 text-light-200">
             {row.title}
           </Text>
         ) : null}
