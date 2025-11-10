@@ -9,8 +9,12 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIStatusBarHidden": true
+      }
     },
+    "andrioStatusBar": { "hidden": true},
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#ffffff",
