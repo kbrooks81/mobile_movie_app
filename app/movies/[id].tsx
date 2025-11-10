@@ -3,7 +3,7 @@ import { icons } from "@/constants/icons"
 import { extractUSCertification, fetchMovieDetails, fetchMovieReleaseInfo } from "@/services/api"
 import { deleteSaved, getByMovieId, saveMovie } from "@/services/saved"
 import useFetch from '@/services/useFetch'
-import { Feather } from "@expo/vector-icons"
+import { Feather, Ionicons } from "@expo/vector-icons"
 import { router, useLocalSearchParams } from 'expo-router'
 import { Flame } from "lucide-react-native"
 import React from 'react'
@@ -55,13 +55,12 @@ const MovieDetails = () => {
   }, [movieId]);
 
   const onToggleSave = async () => {
-    if (!movieId /* || !movie */) return;
+    if (!movieId) return;
     if (saving) return;
     setSaving(true);
 
     try {
       if (!isSaved) {
-        // you may have the movie object named differently; pass the fields you have
         const created = await saveMovie({
           id: movieId,
           title: movie?.title,
@@ -96,6 +95,12 @@ const MovieDetails = () => {
       <ScrollView contentContainerStyle={{ paddingBottom: 80 }}>
         <View className="relative">
           <Image source={{ uri: `https://image.tmdb.org/t/p/w500${movie?.poster_path}` }} className="w-full h-[550px]" resizeMode="stretch"/>
+          <TouchableOpacity 
+            className="absolute top-12 left-5 rounded-full bg-black/70 items-center justify-center z-50 shadow-md shadow-black/40 active:opacity-80"
+            onPress={router.back}
+          >
+            <Ionicons name="arrow-back-circle-outline" size={40} color={"white"}/>
+          </TouchableOpacity>
 
           <TouchableOpacity
             onPress={onToggleSave}
@@ -104,14 +109,14 @@ const MovieDetails = () => {
             accessibilityRole="button"
             accessibilityLabel={isSaved ? "Unsave movie" : "Save movie"}
             accessibilityState={{ selected : isSaved }}
-            className="absolute top-5 left-6 z-10 bg-black/45 rounded-full px-3 py-2 border border-white/20"
+            className="absolute top-12 right-5 rounded-full items-center justify-center z-50 shadow-md shadow-black/40 active:opacity-80"
           >
             {saving ? (
               <ActivityIndicator />
             ) : (
               <Feather
                 name={isSaved ? "bookmark" : "bookmark"}
-                size={25}
+                size={50}
                 color={isSaved ? "#ab8bff" : "#ffffff"} 
               />
             )}
@@ -185,18 +190,6 @@ const MovieDetails = () => {
           <MovieInfo label="Production Companies" value={movie?.production_companies?.map((company: any) => company.name).join(' ・ ') || 'N/A'} />
         </View>
       </ScrollView>
-
-      <TouchableOpacity 
-        className="absolute bottom-5 left-0 right-0 mx-5 bg-accent rounded-lg py-3 flex flex-row items-center justify-center z-50 shadow-lg active:opacity-90"
-        onPress={router.back}
-      >
-        <Image 
-          source={icons.arrow} 
-          className="size-5 mr-2 rotate-180" 
-          tintColor={"#fff"} 
-        />
-        <Text className="text-white font-bold text-base">Go back</Text>
-      </TouchableOpacity>
     </View>
   )
 }
